@@ -8,12 +8,13 @@ export class NotesController extends BaseController {
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.create)
-      .get('/:id', this.getById)
-      .delete('/:id', this.remove)
+      .get('', this.getById)
+      .delete('/:noteId', this.remove)
   }
   async create(req, res, next) {
     try {
       req.body.creatorId = req.userInfo.id
+      req.body.projectId = req.params.projectId
       const note = await notesService.create(req.body)
       return res.send(note)
     } catch (error) {
@@ -22,7 +23,7 @@ export class NotesController extends BaseController {
   }
   async getById(req, res, next) {
     try {
-      const note = await notesService.getById(req.params.id)
+      const note = await notesService.getById(req.params.projectId)
       return res.send(note)
     } catch (error) {
       next(error)
@@ -30,7 +31,7 @@ export class NotesController extends BaseController {
   }
   async remove(req, res, next) {
     try {
-      await notesService.remove(req.params.id, req.userInfo.id)
+      await notesService.remove(req.params.noteId, req.userInfo.id)
       return res.send('deleted')
     } catch (error) {
       next(error)

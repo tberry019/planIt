@@ -36,7 +36,7 @@ class TasksService {
   async remove(taskId, userId) {
     const original = await dbContext.Tasks.findById(taskId)
     if (original.creatorId.toString() !== userId) {
-      throw new BadRequest('Could not remove task.')
+      throw new BadRequest('Could not remove tasks.')
     }
     await original.remove()
     return original

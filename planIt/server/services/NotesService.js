@@ -9,8 +9,8 @@ class NotesService {
     return note
   }
 
-  async getById(noteId) {
-    const note = await dbContext.Notes.findById(noteId).populate('creator', 'name description')
+  async getById(projectId) {
+    const note = await dbContext.Notes.find({ projectId: projectId }).populate('creator', 'name description')
     if (!note) {
       throw new BadRequest('Invalid Note ID')
     }
@@ -18,8 +18,8 @@ class NotesService {
     return note
   }
 
-  async remove(id, userId) {
-    const original = await this.getById(id)
+  async remove(notesId, userId) {
+    const original = await dbContext.Notes.findById(notesId)
     if (original.creatorId.toString() !== userId) {
       throw new BadRequest('Could not remove note.')
     }
