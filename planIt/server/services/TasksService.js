@@ -9,8 +9,8 @@ class TasksService {
     return task
   }
 
-  async getById(taskId) {
-    const task = await dbContext.Tasks.findById(taskId).populate('creator', 'name description')
+  async getById(projectId) {
+    const task = await dbContext.Tasks.find({ projectId: projectId }).populate('creator', 'name description')
     if (!task) {
       throw new BadRequest('Invalid Task ID')
     }
@@ -18,24 +18,28 @@ class TasksService {
     return task
   }
 
-  async remove(id, userId) {
-    const original = await this.getById(id)
-    if (original.creatorId.toString() !== userId) {
-      throw new BadRequest('Could not remove sprint.')
+  async edit(edited, taskId) {
+    const original = await dbContext.Tasks.findById(taskId)
+    if (original.creatorId.toString() !== edited.creatorId) {
+      throw new BadRequest('Cannot edit this post')
     }
-    await original.remove()
+    original.name = edited.name || original.name
+    original.weight = edited.weight || original.weight
+    original.sprintId = edited.sprintId || original.sprintId
+    original.isComplete = edited.isComplete || original.isComplete
+
+    await original.save()
     return original
   }
 
-  async edit(update) {
-    const original = await this.getById(update.id)
-    if (original.creator.id.toString() !== update.creatorId)
-      throw new BadRequest('Can not edit this post')
-    original.task = update.task || original.task
-    await original.save()
+
+  async remove(taskId, userId) {
+    const original = await dbContext.Tasks.findById(taskId)
+    if (original.creatorId.toString() !== userId) {
+      throw new BadRequest('Could not remove task.')
+    }
+    await original.remove()
     return original
-
-
   }
 }
 

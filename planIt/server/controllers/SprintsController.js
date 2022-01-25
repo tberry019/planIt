@@ -7,8 +7,8 @@ export class SprintsController extends BaseController {
     super('api/projects/:projectId/sprints')
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
-      // .get('', this.getAll)
-      .get('/:id', this.getById)
+      // .get('', this.getAll)    
+      .get('', this.getByProjectId)
       .post('', this.create)
       .delete('/:id', this.remove)
 
@@ -17,15 +17,16 @@ export class SprintsController extends BaseController {
   async create(req, res, next) {
     try {
       req.body.creatorId = req.userInfo.id
+      req.body.projectId = req.params.projectId
       const sprint = await sprintsService.create(req.body)
       return res.send(sprint)
     } catch (error) {
       next(error)
     }
   }
-  async getById(req, res, next) {
+  async getByProjectId(req, res, next) {
     try {
-      const sprint = await sprintsService.getById(req.params.id)
+      const sprint = await sprintsService.getByProjectId(req.params.projectId)
       return res.send(sprint)
     } catch (error) {
       next(error)
@@ -34,7 +35,7 @@ export class SprintsController extends BaseController {
 
   async remove(req, res, next) {
     try {
-      await sprintsService.remove(req.params.id, req.userInfo.id)
+      await sprintsService.remove(req.userInfo.id, req.params.projectId)
       return res.send('deleted')
     } catch (error) {
       next(error)

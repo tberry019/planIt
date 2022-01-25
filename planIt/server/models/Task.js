@@ -9,7 +9,7 @@ export const TasksSchema = new Schema({
   projectId: { type: ObjectId, required: true },
   sprintId: { type: ObjectId, required: true },
   creatorId: { type: ObjectId, required: true },
-  isComplete: { type: Boolean, required: true }
+  isComplete: { type: Boolean, required: true, default: false }
 },
   {
     timestamps: true, toJSON: { virtuals: true }

@@ -8,12 +8,13 @@ export class TasksController extends BaseController {
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.create)
-      .get('/:id', this.getById)
-      .put('/:id', this.edit)
-      .delete('/:id', this.remove)
+      .get('', this.getById)
+      .put('/:taskId', this.edit)
+      .delete('/:taskId', this.remove)
   }
   async create(req, res, next) {
     try {
+      req.body.projectId = req.params.projectId
       req.body.creatorId = req.userInfo.id
       const task = await tasksService.create(req.body)
       return res.send(task)
@@ -23,7 +24,8 @@ export class TasksController extends BaseController {
   }
   async getById(req, res, next) {
     try {
-      const task = await tasksService.getById(req.params.id)
+
+      const task = await tasksService.getById(req.params.projectId)
       return res.send(task)
     } catch (error) {
       next(error)
@@ -32,8 +34,8 @@ export class TasksController extends BaseController {
   async edit(req, res, next) {
     try {
       req.body.creatorId = req.userInfo.id
-      req.body.id = req.params.id
-      const updated = await tasksService.edit(req.body)
+      req.body.taskId = req.params.taskId
+      const updated = await tasksService.edit(req.body, req.params.taskId)
       return res.send(updated)
     } catch (error) {
       next(error)
@@ -41,7 +43,7 @@ export class TasksController extends BaseController {
   }
   async remove(req, res, next) {
     try {
-      await tasksService.remove(req.params.id, req.userInfo.id)
+      await tasksService.remove(req.params.taskId, req.userInfo.id)
       return res.send('deleted')
     } catch (error) {
       next(error)
