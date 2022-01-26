@@ -10,7 +10,7 @@ class SprintsService {
   }
 
   async getByProjectId(projectId) {
-    const sprint = await dbContext.Sprints.findOne({ projectId: projectId }).populate('creator', 'name description')
+    const sprint = await dbContext.Sprints.find({ projectId: projectId }).populate('creator', 'name description')
     if (!sprint) {
       throw new BadRequest('Invalid Sprint ID')
     }
@@ -18,8 +18,8 @@ class SprintsService {
     return sprint
   }
 
-  async remove(userId, projectId) {
-    const original = await this.getByProjectId(projectId)
+  async remove(userId, sprintId) {
+    const original = await dbContext.Sprints.findById(sprintId)
 
     if (original.creatorId.toString() !== userId) {
       throw new BadRequest('Could not remove sprint.')

@@ -10,7 +10,7 @@ export class SprintsController extends BaseController {
       // .get('', this.getAll)    
       .get('', this.getByProjectId)
       .post('', this.create)
-      .delete('/:id', this.remove)
+      .delete('/:sprintId', this.remove)
 
   }
 
@@ -35,7 +35,7 @@ export class SprintsController extends BaseController {
 
   async remove(req, res, next) {
     try {
-      await sprintsService.remove(req.userInfo.id, req.params.projectId)
+      await sprintsService.remove(req.userInfo.id, req.params.sprintId)
       return res.send('deleted')
     } catch (error) {
       next(error)
