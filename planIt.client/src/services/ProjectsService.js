@@ -1,4 +1,3 @@
-import { applyStyles } from "@popperjs/core";
 import { AppState }  from "../AppState";
 import { logger }  from "../utils/Logger";
 import { api }  from "./AxiosService";
@@ -14,7 +13,7 @@ class ProjectsService {
 
   async createProject(newProject){
     const res =  await api.post('api/projects', newProject)
-    logger.log('Creating a projects', res.data)
+    logger.log('Creating a project', res.data)
     AppState.projects.unshift(res.data)
     // TODO send to server
     // push to projects collection in appstate
@@ -24,11 +23,17 @@ class ProjectsService {
   async deleteProject(projectId){
     const res = await api.delete('api/projects/' + projectId)
     logger.log('deleting project by id', res.data)
-    AppState.projects = AppState.projects.filter(p => p.projectId !== projectId)
+    AppState.projects = AppState.projects.filter(p => p.id !== projectId)
     
     // TODO send to server
     // filter from AppState.projects
     // router push to projects page
+  }
+
+  async getByProjectId (projectId) {
+    const res = await api.get('api/projects/' + projectId)
+    logger.log('grabbing project by id', res.data)
+    AppState.activeProject = (res.data) 
   }
 
 }

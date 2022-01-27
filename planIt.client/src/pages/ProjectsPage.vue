@@ -7,9 +7,9 @@
       <div class="container-fluid">
         <div class="row">
           <h2 >Get to work you coding slaves</h2>
-          <div class="col-8 py-3" v-for="p in projects" :key="p.id">
+          <div class="col-8 py-3" v-for="p in projects" :key="p.id" @click="getByProjectId(p.id)">
             <div class="card">
-              <router-link :to="{name: 'Project', params: {id: p.id} }">
+              <router-link :to="{name: 'Project', params: {id: p.id} }" >
                 <div class="d-flex justify-content-between p-2 align-items-center my-2">
                   <div class="card-body">{{p.name}}</div>
                 </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { computed, triggerRef } from "@vue/reactivity"
+import { computed } from "@vue/reactivity"
 import { AppState } from "../AppState"
 import Pop from "../utils/Pop"
 import { projectsService } from "../services/ProjectsService"
@@ -48,8 +48,21 @@ export default {
       projects: computed(() => AppState.projects),
       //NOTE FIX THIS GARBAGE
       async deleteProject(id){
+        try {
         if (await Pop.confirm()) {
           await projectsService.deleteProject(id)
+        }
+        } catch (error) {
+          Pop(error.message, "error")
+          logger.log(error.message)
+        }
+      },
+      async getByProjectId(projectId) {
+        try {
+          await projectsService.getByProjectId(projectId)
+        } catch (error) {
+          Pop(error.message, "error")
+          logger.log(error.message)
         }
       }
     }
