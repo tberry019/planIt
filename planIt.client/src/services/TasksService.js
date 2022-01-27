@@ -1,18 +1,28 @@
+import { AppState } from "../AppState"
+import { logger } from "../utils/Logger"
+import { api } from "./AxiosService"
+
 class TasksService {
-  async getAll(projectId){
+  async getAll(projectId) {
+    const res = await api.get('api/projects/' + projectId + '/tasks/')
+    logger.log('getting tasks', res.data)
+    AppState.tasks = res.data
+  }
+
+  async createTask(newTask, projectId) {
+    const res = await api.post('api/projects/' + projectId + '/tasks/', newTask)
+    logger.log('creating task', res.data)
+    AppState.tasks.push(res.data)
 
   }
 
-  async create(newTasks){
-
+  async deleteTask(projectId, taskId) {
+    await api.delete('api/projects/' + projectId + '/tasks/' + taskId)
+    AppState.tasks = AppState.tasks.filter(t => t.id !== taskId)
   }
 
-  async deleteTask(projectId, taskId){
+  async moveTask(projectId, oldSprintId, newSprintId) {
 
-  }
-
-  async moveTask(projectId, oldSprintId, newSprintId){
-    
   }
 }
 

@@ -1,11 +1,11 @@
 <template>
-  <form @submit.prevent="createProject">
+  <form @submit.prevent="createTask">
     <div class="form-group">
-      <label for="name">Name...</label>
+      <label for="name">Task Name...</label>
       <input
+        type="text"
         placeholder="Name"
         v-model="editable.name"
-        type="text"
         class="form-control"
         name="name"
         id="name"
@@ -15,16 +15,16 @@
       />
     </div>
     <div class="form-group">
-      <label for="description">Description...</label>
+      <label for="name">Weight...</label>
       <input
-        placeholder="Description"
-        v-model="editable.description"
-        type="text"
+        type="number"
+        placeholder="Weight"
+        v-model="editable.weight"
         class="form-control"
-        name="description"
-        id="description"
-        min="2"
-        max="50"
+        name="weight"
+        id="weight"
+        min="1"
+        max="10"
         required
       />
     </div>
@@ -49,26 +49,37 @@
   </form>
 </template>
 
+
 <script>
+import { useRoute } from "vue-router"
 import { ref, watchEffect } from "@vue/runtime-core"
 import Pop from "../utils/Pop"
-import { projectsService } from "../services/ProjectsService"
+import { tasksService } from "../services/TasksService"
 import { Modal } from "bootstrap"
 export default {
-
-  setup() {
+  props: {
+    sprint: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    const route = useRoute()
     const editable = ref({})
-
+    watchEffect(() => {
+      editable.value = {}
+    })
     return {
       editable,
-      async createProject() {
+      async createTask() {
         try {
-          if (editable.value.id) {
-            await projectsService.editProject(editable.value)
+          if (editable.value.projectId) {
+            await tasksService.editTask(editable.value)
             Modal.getOrCreateInstance(document.getElementById('edit-modal')).hide()
           } else {
-            await projectsService.createProject(editable.value)
-            Modal.getOrCreateInstance(document.getElementById('create-project')).hide()
+            editable.value.sprintId = props.sprint.id
+            await tasksService.createTask(editable.value, route.params.id)
+            Modal.getOrCreateInstance(document.getElementById('create-task')).hide()
           }
         } catch (error) {
           Pop.toast(error.message, 'error')
@@ -78,3 +89,7 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+</style>

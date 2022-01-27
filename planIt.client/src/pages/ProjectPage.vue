@@ -1,25 +1,42 @@
 <template>
-<div class="d-flex">
-  <h2>{{ activeProject.name }}</h2>
-  <i class="mdi mdi-delete selectable" @click="deleteProject()"></i>
-</div>
-  
+  <div class="d-flex">
+    <h2>{{ activeProject.name }}</h2>
+    <i class="mdi mdi-delete selectable" @click="deleteProject()"></i>
+  </div>
+
   <p>{{ activeProject.description }}</p>
   <div class="d-flex justify-content-between">
     <h5 class="text-info fs-5 fw-bold">Sprints</h5>
-    <button class="btn btn-white border border-info border-3 text-info fs-5 text-center">Add Sprint</button>
+    <button
+      class="
+        btn btn-white
+        border border-info border-3
+        text-info
+        fs-5
+        text-center
+      "
+      data-bs-toggle="modal"
+      data-bs-target="#create-sprint"
+    >
+      Add Sprint
+    </button>
   </div>
   <p>
     Group your task into sprint for over-arching collections for better
     organization.
   </p>
-  <div class="card m-3">
-    <div class="card-body">
-      <div>
-
-      </div>
-    </div>
+  <div class="row">
+    <Sprint v-for="s in sprints" :key="s.id" :sprint="s" />
   </div>
+
+  <Modal id="create-sprint">
+    <template #modal-title>
+      <h4>Create Sprint</h4>
+    </template>
+    <template #modal-body>
+      <SprintForm />
+    </template>
+  </Modal>
 </template>
 
 
@@ -32,13 +49,16 @@ import { projectsService } from "../services/ProjectsService"
 import Pop from "../utils/Pop"
 import { logger } from "../utils/Logger"
 import { router } from "../router"
-import ProjectsPageVue from "./ProjectsPage.vue"
+import { sprintsService } from "../services/SprintsService"
+import { tasksService } from "../services/TasksService"
 export default {
   setup() {
     const route = useRoute()
     onMounted(async () => {
       try {
         await projectsService.getByProjectId(route.params.id)
+        await sprintsService.getSprintsByProject(route.params.id)
+        await tasksService.getAll(route.params.id)
       } catch (error) {
         logger.error(error)
         Pop.toast('Unable to get project by id', error)
@@ -55,18 +75,29 @@ export default {
       sprints: computed(() => AppState.sprints),
       task: computed(() => AppState.tasks),
       activeProject: computed(() => AppState.activeProject),
-      
-      async deleteProject(){
+
+      async deleteProject() {
         try {
-        if (await Pop.confirm()) {
-          await projectsService.deleteProject(route.params.id)
-          router.push({ path: '/' })
-        }
+          if (await Pop.confirm()) {
+            await projectsService.deleteProject(route.params.id)
+            router.push({ path: '/' })
+          }
         } catch (error) {
           Pop(error.message, "error")
           logger.log(error.message)
         }
       },
+
+      async getSprintsByProject() {
+        try {
+          await sprintsService.getSprintsByProject()
+        } catch (error) {
+          Pop(error.message, "error")
+          logger.log(error.message)
+        }
+      },
+
+
     }
   }
 }

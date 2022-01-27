@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="createProject">
+  <form @submit.prevent="createSprint">
     <div class="form-group">
       <label for="name">Name...</label>
       <input
@@ -14,20 +14,7 @@
         required
       />
     </div>
-    <div class="form-group">
-      <label for="description">Description...</label>
-      <input
-        placeholder="Description"
-        v-model="editable.description"
-        type="text"
-        class="form-control"
-        name="description"
-        id="description"
-        min="2"
-        max="50"
-        required
-      />
-    </div>
+
     <div class="d-flex justify-content-between my-2">
       <button
         type="button"
@@ -52,23 +39,25 @@
 <script>
 import { ref, watchEffect } from "@vue/runtime-core"
 import Pop from "../utils/Pop"
-import { projectsService } from "../services/ProjectsService"
+import { sprintsService } from "../services/SprintsService"
+import { useRoute } from "vue-router"
 import { Modal } from "bootstrap"
 export default {
 
   setup() {
+    const route = useRoute()
     const editable = ref({})
 
     return {
       editable,
-      async createProject() {
+      async createSprint() {
         try {
-          if (editable.value.id) {
-            await projectsService.editProject(editable.value)
+          if (editable.value.projectId) {
+            await sprintsService.editSprint(editable.value)
             Modal.getOrCreateInstance(document.getElementById('edit-modal')).hide()
           } else {
-            await projectsService.createProject(editable.value)
-            Modal.getOrCreateInstance(document.getElementById('create-project')).hide()
+            await sprintsService.createSprint(editable.value, route.params.id)
+            Modal.getOrCreateInstance(document.getElementById('create-sprint')).hide()
           }
         } catch (error) {
           Pop.toast(error.message, 'error')
