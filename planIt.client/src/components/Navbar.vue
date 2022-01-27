@@ -1,8 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
-        <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
+    <router-link class="navbar-brand d-flex" :to="{ name: 'Projects' }">
+      <div class="d-flexalign-items-center">
+        <i class="mdi mdi-rocket-launch-outline fs-1 fw-bold "> PLAN IT</i>
+        <i class=" px-3 mdi mdi-earth fs-1"></i>
       </div>
     </router-link>
     <button
@@ -19,12 +20,12 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
         <li>
-          <router-link
-            :to="{ name: 'Projects' }"
+          <!-- <router-link
+            :to="{ name: 'Project' }"
             class="btn text-success lighten-30 selectable text-uppercase"
           >
-            Projects
-          </router-link>
+            Project
+          </router-link> -->
         </li>
       </ul>
       <span class="navbar-text">
