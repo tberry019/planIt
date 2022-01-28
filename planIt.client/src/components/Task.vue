@@ -2,16 +2,14 @@
   <div class="col-12">
     <div class="d-flex">
       <div class="d-flex">
-        <div class="form-check">
+        <div class="form-check" @click="taskComplete">
           <input
             class="form-check-input"
             type="checkbox"
             value=""
             id="flexCheckDefault"
           />
-          <label class="form-check-label" for="flexCheckDefault">
-            Status
-          </label>
+          <label class="form-check-label" for="flexCheckDefault"> </label>
         </div>
         <p>{{ task.name }}</p>
         <i class="mdi mdi-delete" @click="deleteTask"></i>
