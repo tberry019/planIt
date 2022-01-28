@@ -6,6 +6,7 @@
           <div>
             {{ sprint.name }}
             <i class="mdi mdi-weight"></i>
+            {{ totalWeight }}
           </div>
           <div class="d-flex">
             <button
@@ -62,6 +63,12 @@ export default {
     const route = useRoute()
     return {
       tasks: computed(() => AppState.tasks.filter(t => t.sprintId == props.sprint.id)),
+      totalWeight: computed(() => {
+        const tasks = AppState.tasks.filter(t => t.sprintId == props.sprint.id)
+        let total = 0
+        tasks.forEach(t => total += t.weight)
+        return total
+      }),
       async deleteSprint() {
         try {
           await sprintsService.deleteSprint(props.sprint.id, route.params.id)

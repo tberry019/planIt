@@ -32,4 +32,4 @@ class ProjectsService {
   }
 }
 
-export const projectsService = new ProjectsService()
+export const projectsService = new ProjectsService()  

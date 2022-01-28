@@ -8,7 +8,7 @@
       aria-controls="offcanvasLeft"
       @click="OpenProjectCanvas"
     >
-      Create
+      My Projects
     </button>
     <button class="btn btn-info col-5">Edit</button>
   </div>
@@ -38,8 +38,14 @@
           <p>STARTED</p>
         </div>
         <div>
-          <ol>
-            <li>project</li>
+          <ol v-for="p in projects" :key="p.id" :project="p">
+            <router-link :to="{ name: 'Project', params: { id: p.id } }">
+              <li>
+                <Projects />
+              </li>
+            </router-link>
+            <!-- FIXME v-for p in projects and router-link -->
+            <!-- <li>project</li> -->
           </ol>
           <div class="d-flex justify-content-center">
             <button
