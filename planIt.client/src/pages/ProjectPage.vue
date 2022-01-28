@@ -3,7 +3,7 @@
     <h2>{{ activeProject.name }}</h2>
     <i class="mdi mdi-delete selectable" @click="deleteProject()"></i>
   </div>
-
+  <!-- FIX add click to open off canvas -->
   <p>{{ activeProject.description }}</p>
   <div class="d-flex justify-content-between">
     <h5 class="text-info fs-5 fw-bold">Sprints</h5>
@@ -59,6 +59,7 @@ export default {
         await projectsService.getByProjectId(route.params.id)
         await sprintsService.getSprintsByProject(route.params.id)
         await tasksService.getAll(route.params.id)
+        // FIXME get all notes
       } catch (error) {
         logger.error(error)
         Pop.toast('Unable to get project by id', error)

@@ -8,7 +8,7 @@
       aria-controls="offcanvasLeft"
       @click="OpenProjectCanvas"
     >
-      Create
+      My Projects
     </button>
     <button class="btn btn-info col-5">Edit</button>
   </div>
@@ -39,6 +39,7 @@
         </div>
         <div>
           <ol>
+            <!-- FIXME v-for p in projects and router-link -->
             <li>project</li>
           </ol>
           <div class="d-flex justify-content-center">

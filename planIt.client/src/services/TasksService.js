@@ -21,8 +21,15 @@ class TasksService {
     AppState.tasks = AppState.tasks.filter(t => t.id !== taskId)
   }
 
-  async moveTask(projectId, oldSprintId, newSprintId) {
+  async editTask(task) {
+    // FIXME write put request
+    // no need to update appstate 
+  }
 
+  async moveTask(task, newSprintId) {
+    // FIXME send put to server with {sprintId: newSprintId}
+    // AppState.tasks.filter(t=> t.id !== task.id)
+    // AppState.tasks.push(res.data)
   }
 }
 

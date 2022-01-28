@@ -67,8 +67,9 @@ export default {
             await projectsService.editProject(editable.value)
             Modal.getOrCreateInstance(document.getElementById('edit-modal')).hide()
           } else {
-            await projectsService.createProject(editable.value)
+            let newId = await projectsService.createProject(editable.value)
             Modal.getOrCreateInstance(document.getElementById('create-project')).hide()
+            // FIXME router.push({name: "Project", params: {id: newId}}) 
           }
         } catch (error) {
           Pop.toast(error.message, 'error')
