@@ -6,15 +6,32 @@
     <div v-else>
       <div class="container-fluid">
         <div class="row">
-          <h2 >Get to work you coding slaves</h2>
-          <div class="col-8 py-3" v-for="p in projects" :key="p.id" @click="getByProjectId(p.id)">
+          <h2>Get to work you coding slaves</h2>
+          <div
+            class="col-8 py-3"
+            v-for="p in projects"
+            :key="p.id"
+            @click="getByProjectId(p.id)"
+          >
             <div class="card">
-              <router-link :to="{name: 'Project', params: {id: p.id} }" >
-                <div class="d-flex justify-content-between p-2 align-items-center my-2">
-                  <div class="card-body">{{p.name}}</div>
+              <router-link :to="{ name: 'Project', params: { id: p.id } }">
+                <div
+                  class="
+                    d-flex
+                    justify-content-between
+                    p-2
+                    align-items-center
+                    my-2
+                  "
+                >
+                  <div class="card-body">{{ p.name }}</div>
                 </div>
               </router-link>
-              <i class="mdi mdi-delete selectable" @click="deleteProject(p.id)"></i>
+              <i
+                class="mdi mdi-delete selectable"
+                title="delete Project"
+                @click="deleteProject(p.id)"
+              ></i>
             </div>
           </div>
         </div>
@@ -47,11 +64,11 @@ export default {
       user: computed(() => AppState.user),
       projects: computed(() => AppState.projects),
       //NOTE FIX THIS GARBAGE
-      async deleteProject(id){
+      async deleteProject(id) {
         try {
-        if (await Pop.confirm()) {
-          await projectsService.deleteProject(id)
-        }
+          if (await Pop.confirm()) {
+            await projectsService.deleteProject(id)
+          }
         } catch (error) {
           Pop(error.message, "error")
           logger.log(error.message)

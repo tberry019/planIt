@@ -14,7 +14,11 @@
           <label class="form-check-label" for="flexCheckDefault"> </label>
         </div>
         <p>{{ task.name }}</p>
-        <i class="mdi mdi-delete" @click="deleteTask"></i>
+        <i
+          class="mdi mdi-delete selectable"
+          title="delete Task"
+          @click="deleteTask"
+        ></i>
       </div>
       <div class="d-flex ms-5">
         <p>{{ task.weight }}</p>
@@ -39,26 +43,28 @@
     </div>
 
     <form @submit.prevent="createNote" class="d-flex m-3">
-      <!-- FIXME v-model for note.body -->
-      <input type="text" />
-      <i
-        @click="createNote"
-        class="btn btn-success mdi mdi-plus"
-        title="add note"
-      ></i>
+      <div class="form-group">
+        <input type="text" placeholder="Note" v-model="note.body" />
+        <i
+          @click="createNote"
+          class="btn btn-success mdi mdi-plus"
+          title="add note"
+        ></i>
+      </div>
     </form>
-    <div>
-      <!-- FIXME v-for not in notes -->
+    <div v-for="n in notes" :key="n.id">
       <div class="d-flex p-3 border border primary m-2">
-        <img src="//placehold.it/200x200" height="50" alt="" />
-        <p>AUTHOR NAME</p>
+        <img class="rounded-pill" :src="n.creator.picture" height="50" alt="" />
+        <p>{{ n.creator.name }}</p>
         <div class="ms-4">
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-            cumque necessitatibus assumenda iusto quod! Quasi porro, corrupti
-            eveniet modi atque sed reprehenderit vitae nemo! Nostrum voluptate
-            quisquam placeat quibusdam hic.
+            {{ n.body }}
           </p>
+          <i
+            class="mdi mdi-delete selectable"
+            title="delete note"
+            @click="deleteNote(n)"
+          ></i>
         </div>
       </div>
     </div>
@@ -67,9 +73,12 @@
 
 
 <script>
+import { computed, ref } from "@vue/reactivity"
+import { notesService } from "../services/NotesService"
 import { tasksService } from "../services/TasksService"
 import { logger } from "../utils/Logger"
 import Pop from "../utils/Pop"
+import { AppState } from "../AppState"
 export default {
   props: {
     task: {
@@ -78,7 +87,10 @@ export default {
     }
   },
   setup(props) {
+    const note = ref({ taskId: props.task.id })
     return {
+      note,
+      notes: computed(() => AppState.notes.filter(n => n.taskId = props.task.id)),
       async deleteTask() {
         try {
           if (await Pop.confirm()) {
@@ -98,7 +110,18 @@ export default {
         // FIXME call to service to Move task
       },
       async createNote() {
-        // FIXME send content of v-model to notesService
+        try {
+          await notesService.createNote(note.value, props.task.projectId)
+        } catch (error) {
+          Pop.toast(error.message, 'error')
+        }
+      },
+      async deleteNote(note) {
+        try {
+          await notesService.deleteNote(note)
+        } catch (error) {
+          Pop.toast(error.message, 'error')
+        }
       }
     }
   }

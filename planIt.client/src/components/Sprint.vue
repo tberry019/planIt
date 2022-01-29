@@ -22,6 +22,7 @@
                 <p class="mx-2">Delete Sprint</p>
                 <i
                   class="mdi mdi-delete selectable"
+                  title="delete Sprint"
                   @click="deleteSprint()"
                 ></i>
               </div>

@@ -41,7 +41,7 @@
           <ol v-for="p in projects" :key="p.id" :project="p">
             <router-link :to="{ name: 'Project', params: { id: p.id } }">
               <li>
-                <Projects />
+                {{ p.name }}
               </li>
             </router-link>
             <!-- FIXME v-for p in projects and router-link -->

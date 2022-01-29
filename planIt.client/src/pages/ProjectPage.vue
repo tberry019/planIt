@@ -1,7 +1,11 @@
 <template>
   <div class="d-flex">
     <h2>{{ activeProject.name }}</h2>
-    <i class="mdi mdi-delete selectable" @click="deleteProject()"></i>
+    <i
+      class="mdi mdi-delete selectable"
+      title="delete project"
+      @click="deleteProject()"
+    ></i>
   </div>
   <!-- FIX add click to open off canvas -->
   <p>{{ activeProject.description }}</p>
@@ -51,6 +55,7 @@ import { logger } from "../utils/Logger"
 import { router } from "../router"
 import { sprintsService } from "../services/SprintsService"
 import { tasksService } from "../services/TasksService"
+import { notesService } from "../services/NotesService"
 export default {
   setup() {
     const route = useRoute()
@@ -59,6 +64,7 @@ export default {
         await projectsService.getByProjectId(route.params.id)
         await sprintsService.getSprintsByProject(route.params.id)
         await tasksService.getAll(route.params.id)
+        await notesService.getNotesByProject(route.params.id)
         // FIXME get all notes
       } catch (error) {
         logger.error(error)
@@ -76,6 +82,7 @@ export default {
       sprints: computed(() => AppState.sprints),
       task: computed(() => AppState.tasks),
       activeProject: computed(() => AppState.activeProject),
+      notes: computed(() => AppState.notes),
 
       async deleteProject() {
         try {
@@ -84,7 +91,7 @@ export default {
             router.push({ path: '/' })
           }
         } catch (error) {
-          Pop(error.message, "error")
+          Pop.toast(error.message, "error")
           logger.log(error.message)
         }
       },
@@ -93,10 +100,19 @@ export default {
         try {
           await sprintsService.getSprintsByProject()
         } catch (error) {
-          Pop(error.message, "error")
+          Pop.toast(error.message, "error")
           logger.log(error.message)
         }
       },
+
+      async getNotesByProject() {
+        try {
+          await notesService.getNotesByProject()
+        } catch (error) {
+          Pop.toast(error.message, "error")
+          logger.log(error.message)
+        }
+      }
 
 
     }

@@ -5,12 +5,12 @@ class NotesService {
 
   async create(newNote) {
     const note = await dbContext.Notes.create(newNote)
-    await note.populate('creator', 'name description')
+    await note.populate('creator', 'name picture')
     return note
   }
 
   async getById(projectId) {
-    const note = await dbContext.Notes.find({ projectId: projectId }).populate('creator', 'name description')
+    const note = await dbContext.Notes.find({ projectId: projectId }).populate('creator', 'name picture')
     if (!note) {
       throw new BadRequest('Invalid Note ID')
     }
