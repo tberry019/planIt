@@ -53,12 +53,13 @@
 import { ref, watchEffect } from "@vue/runtime-core"
 import Pop from "../utils/Pop"
 import { projectsService } from "../services/ProjectsService"
-import { Modal } from "bootstrap"
+import { Modal, Offcanvas } from "bootstrap"
+import { useRouter } from "vue-router"
 export default {
 
   setup() {
     const editable = ref({})
-
+    const router = useRouter()
     return {
       editable,
       async createProject() {
@@ -69,7 +70,8 @@ export default {
           } else {
             let newId = await projectsService.createProject(editable.value)
             Modal.getOrCreateInstance(document.getElementById('create-project')).hide()
-            // FIXME router.push({name: "Project", params: {id: newId}}) 
+            Offcanvas.getOrCreateInstance(document.getElementById('offcanvasLeft')).hide()
+            router.push({ name: "Project", params: { id: newId } })
           }
         } catch (error) {
           Pop.toast(error.message, 'error')

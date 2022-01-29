@@ -24,12 +24,15 @@ class TasksService {
   async editTask(task) {
     // FIXME write put request
     // no need to update appstate 
+    await api.put(`api/projects/${task.projectId}/tasks/${task.id}`, task)
   }
 
   async moveTask(task, newSprintId) {
     // FIXME send put to server with {sprintId: newSprintId}
-    // AppState.tasks.filter(t=> t.id !== task.id)
-    // AppState.tasks.push(res.data)
+    const res = await api.put(`api/projects/${task.projectId}/tasks/${task.id}`, { sprintId: newSprintId })
+    AppState.tasks = AppState.tasks.filter(t => t.id !== task.id)
+    AppState.tasks.push(res.data)
+
   }
 }
 

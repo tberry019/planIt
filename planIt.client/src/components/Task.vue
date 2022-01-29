@@ -26,7 +26,7 @@
       </div>
       <div class="dropdown">
         <button
-          class="btn btn-secondary dropdown-toggle"
+          class="btn btn-secondary dropdown-toggle ms-3"
           type="button"
           id="dropdownMenuButton1"
           data-bs-toggle="dropdown"
@@ -37,7 +37,11 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <!-- FIXME v-for s in sprints -->
           <!-- @click="moveToSprint(s.id)" -->
-          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li v-for="s in sprints" :key="s.id">
+            <p class="dropdown-item" @click="moveToSprint(s.id)">
+              {{ s.name }}
+            </p>
+          </li>
         </ul>
       </div>
     </div>
@@ -91,6 +95,7 @@ export default {
     return {
       note,
       notes: computed(() => AppState.notes.filter(n => n.taskId = props.task.id)),
+      sprints: computed(() => AppState.sprints),
       async deleteTask() {
         try {
           if (await Pop.confirm()) {
@@ -105,9 +110,19 @@ export default {
       async saveTask() {
         // FIXME
         // send task to taskService. 
+        try {
+          await tasksService.editTask(props.task)
+        } catch (error) {
+
+        }
       },
-      async moveToSprint() {
+      async moveToSprint(sprintId) {
         // FIXME call to service to Move task
+        try {
+          await tasksService.moveTask(props.task, sprintId)
+        } catch (error) {
+          Pop.toast(error.message, 'error')
+        }
       },
       async createNote() {
         try {

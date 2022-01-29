@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <div class="card" v-for="t in tasks" :key="t.id">
+      <div class="card p-3" v-for="t in tasks" :key="t.id">
         <Task :task="t" />
       </div>
     </div>
