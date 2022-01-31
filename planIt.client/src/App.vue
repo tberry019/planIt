@@ -7,15 +7,11 @@
       <div class="row">
         <Sidebar />
         <div class="col-md-10">
-        <router-view />
+          <router-view />
         </div>
       </div>
     </div>
-
   </main>
-  <footer>
-    <div class="bg-dark text-light text-center p-4">Made with 💖 by PlanIt</div>
-  </footer>
 </template>
 
 <script>

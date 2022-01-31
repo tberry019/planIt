@@ -1,9 +1,16 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+  <nav
+    class="
+      navbar navbar-expand-lg navbar-dark
+      bg-info
+      border border-dark border-4
+      px-3
+    "
+  >
     <router-link class="navbar-brand d-flex" :to="{ name: 'Projects' }">
       <div class="d-flexalign-items-center">
-        <i class="mdi mdi-rocket-launch-outline fs-1 fw-bold "> PLAN IT</i>
-        <i class=" px-3 mdi mdi-earth fs-1"></i>
+        <i class="mdi mdi-rocket-launch-outline fs-1 fw-bold"> PLAN IT</i>
+        <i class="px-3 mdi mdi-earth fs-1"></i>
       </div>
     </router-link>
     <button
@@ -54,10 +61,13 @@
             <img
               :src="user.picture"
               alt="user photo"
-              height="40"
-              class="rounded"
+              height="55"
+              class="rounded-pill"
             />
-            <span class="mx-3 text-success lighten-30">{{ user.name }}</span>
+            <span
+              class="mx-3 text-light font-monospace fw-bold fs-5 text-uppercase"
+              >{{ user.name }}</span
+            >
           </div>
           <div
             class="dropdown-menu p-0 list-group w-100"

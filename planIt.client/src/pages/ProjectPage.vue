@@ -1,23 +1,40 @@
 <template>
-  <div class="d-flex">
-    <h2>{{ activeProject.name }}</h2>
+  <div class="d-flex fs-4 fw-bold text-info p-4 font-monospace">
+    <p>{{ activeProject.name }}</p>
     <i
-      class="mdi mdi-delete selectable"
+      class="mdi mdi-delete selectable mx-3 text-danger"
       title="delete project"
       @click="deleteProject()"
     ></i>
   </div>
-  <!-- FIX add click to open off canvas -->
-  <p>{{ activeProject.description }}</p>
-  <div class="d-flex justify-content-between">
-    <h5 class="text-info fs-5 fw-bold">Sprints</h5>
+  <div class="d-flex">
+    <p class="fw-bold fs-5 px-4 font-monospace">Project Description:</p>
+    <p class="px-1 fs-5 font-monospace">{{ activeProject.description }}</p>
+  </div>
+  <div
+    class="
+      d-flex
+      justify-content-between
+      py-2
+      border-bottom border-info border-5
+    "
+  >
+    <h5 class="text-info fs-2 fw-bolder m-4 text-uppercase font-monospace">
+      Sprints
+    </h5>
     <button
       class="
+        col-4
         btn btn-white
-        border border-info border-3
-        text-info
-        fs-5
+        border border-dark border-4
+        text-white
+        fs-3
         text-center
+        m-0
+        fw-bold
+        bg-info
+        me-5
+        font-monospace
       "
       data-bs-toggle="modal"
       data-bs-target="#create-sprint"
@@ -25,14 +42,13 @@
       Add Sprint
     </button>
   </div>
-  <p>
+  <p class="p-4 font-monospace">
     Group your task into sprint for over-arching collections for better
     organization.
   </p>
   <div class="row">
     <Sprint v-for="s in sprints" :key="s.id" :sprint="s" />
   </div>
-
   <Modal id="create-sprint">
     <template #modal-title>
       <h4>Create Sprint</h4>

@@ -2,26 +2,42 @@
   <div class="col-12 py-2">
     <div class="card border border-info">
       <div class="d-flex justify-content-between p-2 align-items-center my-2">
-        <div class="card-body py-1 fw-bold fs-4 d-flex justify-content-between">
-          <div>
-            {{ sprint.name }}
-            <i class="mdi mdi-weight"></i>
+        <div
+          class="
+            card-body
+            py-1
+            fw-bold
+            fs-4
+            d-flex
+            justify-content-between
+            font-monospace
+          "
+        >
+          <div class="d-flex">
+            <p class="me-5 text-uppercase">{{ sprint.name }}</p>
+            <i class="mdi mdi-weight text-secondary"></i>
             {{ totalWeight }}
           </div>
           <div class="d-flex">
             <button
-              class="btn btn-info text-info bg-white border-2 me-5"
+              class="
+                btn btn-info
+                text-light
+                bg-info
+                border-2
+                me-5
+                font-monospace
+              "
               data-bs-toggle="modal"
               data-bs-target="#create-task"
             >
               Add Task+
             </button>
-            <h5 class="pe-4">1/2 Tasks Complete</h5>
             <div class="d-flex justify-content-end">
-              <div>
-                <p class="mx-2">Delete Sprint</p>
+              <div class="d-flex">
+                <p class="mx-4 fs-5">Delete Sprint</p>
                 <i
-                  class="mdi mdi-delete selectable"
+                  class="mdi mdi-delete selectable text-danger"
                   title="delete Sprint"
                   @click="deleteSprint()"
                 ></i>
@@ -72,7 +88,9 @@ export default {
       }),
       async deleteSprint() {
         try {
-          await sprintsService.deleteSprint(props.sprint.id, route.params.id)
+          if (await Pop.confirm()) {
+            await sprintsService.deleteSprint(props.sprint.id, route.params.id)
+          }
         } catch (error) {
           Pop.toast(error.message, "error")
           logger.log(error.message)

@@ -1,10 +1,10 @@
 <template>
   <div class="col-12">
-    <div class="d-flex">
+    <div class="d-flex p-3 px-3">
       <div class="d-flex">
         <div class="form-check" @click="taskComplete">
           <input
-            class="form-check-input"
+            class="form-check-input border border-info fs-5"
             type="checkbox"
             value=""
             id="flexCheckDefault"
@@ -13,26 +13,37 @@
           />
           <label class="form-check-label" for="flexCheckDefault"> </label>
         </div>
-        <p>{{ task.name }}</p>
-        <i
-          class="mdi mdi-delete selectable"
-          title="delete Task"
-          @click="deleteTask"
-        ></i>
+        <div class="d-flex">
+          <p class="fs-5 ms-2 font-monospace">{{ task.name }}</p>
+          <i
+            class="mdi mdi-delete selectable ms-4 text-danger fs-5"
+            title="delete Task"
+            @click="deleteTask"
+          ></i>
+        </div>
       </div>
-      <div class="d-flex ms-5">
-        <p>{{ task.weight }}</p>
-        <i class="mdi mdi-weight"></i>
+      <div class="d-flex ms-5 fs-5">
+        <i class="mdi mdi-weight text-secondary me-2"></i>
+        <p class="me-5">{{ task.weight }}</p>
       </div>
       <div class="dropdown">
         <button
-          class="btn btn-secondary dropdown-toggle ms-3"
+          class="
+            btn btn-secondary
+            dropdown-toggle
+            ms-3
+            bg-info
+            text-light
+            ms-5
+            font-monospace
+            col-12
+          "
           type="button"
           id="dropdownMenuButton1"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          change sprint
+          Move Sprint
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <!-- FIXME v-for s in sprints -->
@@ -46,22 +57,31 @@
       </div>
     </div>
 
-    <form @submit.prevent="createNote" class="d-flex m-3">
-      <div class="form-group">
-        <input type="text" placeholder="Note" v-model="note.body" />
-        <i
-          @click="createNote"
-          class="btn btn-success mdi mdi-plus"
-          title="add note"
-        ></i>
+    <form @submit.prevent="createNote" class="d-flex m-2">
+      <div class="row">
+        <div class="input-group mb-4">
+          <input type="text" placeholder="Note" v-model="note.body" />
+          <i
+            @click="createNote"
+            class="btn btn-info text-white mdi mdi-plus"
+            title="add note"
+          ></i>
+        </div>
       </div>
     </form>
     <div v-for="n in notes" :key="n.id">
-      <div class="d-flex p-3 border border primary m-2">
-        <img class="rounded-pill" :src="n.creator.picture" height="50" alt="" />
-        <p>{{ n.creator.name }}</p>
-        <div class="ms-4">
-          <p>
+      <div class="d-flex p-3 border border primary m-2 align-items-center">
+        <img
+          class="rounded-pill me-3"
+          :src="n.creator.picture"
+          height="50"
+          alt=""
+        />
+        <p class="text-uppercase font-monospace fw-bold fs-4 me-5">
+          {{ n.creator.name }}
+        </p>
+        <div class="ms-4 d-flex">
+          <p class="me-4 font-monospace fs-5">
             {{ n.body }}
           </p>
           <i
@@ -133,7 +153,9 @@ export default {
       },
       async deleteNote(note) {
         try {
-          await notesService.deleteNote(note)
+          if (await Pop.confirm()) {
+            await notesService.deleteNote(note)
+          }
         } catch (error) {
           Pop.toast(error.message, 'error')
         }
